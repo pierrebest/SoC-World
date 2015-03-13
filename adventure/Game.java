@@ -12,55 +12,71 @@
  *  executes the commands that the parser returns.
  *
  */
+
+
 package adventure;
 
 public class Game
 {
-    private Parser parser;
-    private Player thePlayer;
+  private Parser parser;
+  private Player player;
+  private Room outside, theatre, pub, lab, office;
     private Room currentRoom;
-    private Theatre secondRoom;
-    private ChangingRoom thirdRoom;
-    private Lobby fourthRoom;
+  private int moves;
+ 
+    
 
     /**
      * Create the game and initialise its internal map.
      */
     public Game()
     {
-        thePlayer = new Player();
-        createRooms();
+        Room startRoom = createRooms();
+        player=new Player ("Christian",startRoom);
         parser = new Parser();
     }
 
     /**
      * Create all the rooms and link their exits together.
      */
-    private void createRooms()
+    private Room createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room outside, tenniscourt,lobby, changingrooms, gym;
 // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        outside = new Room("outside the main entrance of the university gym");
+        tenniscourt = new Room("into the tennis court");
+        lobby = new Room("into the lobby of the gym");
+        changingrooms= new Room("into the changing room");
+        gym = new Room("into the gym area");
 
-        // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+// initialise room exits
+        outside.setExit("north",lobby);
+        
+        
+        lobby.setExit("east", tenniscourt);
+        lobby.setExit("south", outside);
+        lobby.setExit("west", changingrooms);
+        lobby.setExit("north", gym);
 
-        theater.setExit("west", outside);
+        tenniscourt.setExit("south", lobby);
+        
 
-        pub.setExit("east", outside);
+        gym.setExit("south", lobby);
 
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
+        changingrooms.setExit("south", lobby);
+        changingrooms.setExit("north", gym);
+        
+// put items in the room
+        lobby.addItem(new Item("security card", "a pass to the security office", 0.5));
+        changingrooms.addItem(new Item("pound coin", "used to rent a locker", 0.75));
+        tenniscourt.addItem(new Item("tennis balls", "a tennis ball coommonly use to play the sport", 30));
+        gym.addItem(new Item("torch", "a torch to show you the way", 0.1));
+        
+// start game outside
+        
+        currentRoom = outside;
 
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        return currentRoom;
     }
 
     /**
@@ -88,13 +104,13 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the SoC World!");
-        System.out.println("SoC World is a new, incredibly boring adventure game.");
+        System.out.println("Welcome to the Treadmania ");
+        System.out.println("Treadmania is a new, incredibly fantasic adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        thePlayer.setRoom(currentRoom);
-        System.out.println(thePlayer.getRoom().getLongDescription());
-        System.out.println(" You are facing " + thePlayer.getDirection());
+        player.setRoom(currentRoom);
+        System.out.println(player.getRoom().getLongDescription());
+        System.out.println(" You are currently facing " + player.getDirection());
     }
 
     /**
@@ -143,8 +159,8 @@ public class Game
      */
     private void printHelp()
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("You are not motivated!");
+        System.out.println("fitness is not an easy thing, however it looks like you need help!.");
         System.out.println();
         System.out.println("Your command words are:");
         parser.showCommands();
@@ -159,7 +175,7 @@ public class Game
 
 
         // Try to leave current room.
-        Room nextRoom = thePlayer.getRoom().getExit(thePlayer.getDirection().toString());
+        Room nextRoom = player.getRoom().getExit(player.getDirection().toString());
 
         if (nextRoom == null)
         {
@@ -167,9 +183,9 @@ public class Game
         }
         else
         {
-            thePlayer.setRoom(nextRoom);
-            System.out.println(thePlayer.getRoom().getLongDescription());
-            System.out.println("You are facing " + thePlayer.getDirection());
+            player.setRoom(nextRoom);
+            System.out.println(player.getRoom().getLongDescription());
+            System.out.println("You are facing " + player.getDirection());
         }
     }
 
@@ -189,17 +205,17 @@ public class Game
         String direction = command.getSecondWord();
         if (direction.equals("left"))
         {
-            thePlayer.turnLeft();
+            player.turnLeft();
         }
         else if (direction.equals("right"))
         {
-            thePlayer.turnRight();
+            player.turnRight();
         }
         else
         {
             System.out.println("You can not turn that way");
         }
-        System.out.println("You are currently facing " + thePlayer.getDirection());
+        System.out.println("You are currently facing " + player.getDirection());
     }
 
 

@@ -16,15 +16,17 @@ public class Player
     /**
      * Construct a player with "null" location
      * facing east
+     * @param christian
+     * @param startRoom
      */
-    public Player()
+    public Player(String christian, Room startRoom)
     {
         here = null;
-        facing = Direction.EAST;
+        facing = Direction.NORTH;
     }
 
     /**
-     * return the direction the player is facing
+     * return the direction thie player is facing
      */
     public Direction getDirection()
     {
@@ -80,26 +82,8 @@ public class Player
         }
     }
 
-    /**
-     * make the player turn right
-     */
     public void turnRight()
     {
-        if (facing == Direction.NORTH)
-        {
-            facing = Direction.EAST;
-        }
-        else if (facing == Direction.WEST)
-        {
-            facing = Direction.NORTH;
-        }
-        else if (facing == Direction.SOUTH)
-        {
-            facing = Direction.WEST;
-        }
-        else
-        {
-            facing = Direction.SOUTH;
-        }
     }
 }
+

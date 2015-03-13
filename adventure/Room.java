@@ -92,5 +92,10 @@ public class Room
     {
         return exits.get(direction);
     }
+
+    public void addItem(Item item)
+    {
+
+    }
 }
 
